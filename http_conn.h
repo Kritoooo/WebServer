@@ -84,6 +84,13 @@ public:
     bool read();       // 非阻塞读
     bool write();      // 非阻塞写
 
+    HTTP_CODE process_read(); // 解析HTTP请求
+    HTTP_CODE parse_request_line(char * text); // 解析请求首行
+    HTTP_CODE parse_headers(char * text); // 解析请求头
+    HTTP_CODE parse_content(char * text);  // 解析请求体
+
+    LINE_STATUS parse_line();
+
 private:
     int m_sockfd;                      // 该HTTP连接的socket
     sockaddr_in m_address;             // 通信的socket地址

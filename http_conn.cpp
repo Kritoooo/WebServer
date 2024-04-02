@@ -93,6 +93,21 @@ bool http_conn::read()
     return true;
 }
 
+HTTP_CODE http_conn::process_read() {
+
+}
+HTTP_CODE http_conn::parse_request_line(char* text) {
+
+}
+HTTP_CODE http_conn::parse_headers(char* text) {
+    
+}
+
+LINE_STATUS http_conn::parse_line() {
+
+}
+
+
 bool http_conn::write()
 {
     printf("一次性写完数据\n");
