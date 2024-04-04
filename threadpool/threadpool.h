@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <list>
 #include <exception>
-#include "locker.h"
+#include "../locker/locker.h"
 #include <cstdio>
 
 // 线程池类，定义成模板类，为了代码复用，模板参数T是任务类
@@ -94,13 +94,14 @@ void* threadpool<T>::worker(void* arg) {
 template<typename T>
 void threadpool<T>::run() {
     while(!m_stop) {
+
         m_queuestat.wait();
         m_queuelocker.lock();
         if(m_workqueue.empty()) {
             m_queuelocker.unlock();
             continue;
         }
-
+        
         T* request = m_workqueue.front();
         m_workqueue.pop_front();
         m_queuelocker.unlock();
