@@ -1,5 +1,5 @@
 #include "sql_conn.h"
-#include <mysql/mysql.h>
+#include <chrono>
 
 MysqlConn::MysqlConn() {
     m_conn = mysql_init(nullptr);
@@ -37,6 +37,9 @@ bool MysqlConn::query(std::string sql) {
 bool MysqlConn::next() {
     if(m_result != nullptr) {
         m_row = mysql_fetch_row(m_result);
+        if (m_row != nullptr) {
+            return true;
+        }
     }
     return false;
 }
@@ -67,4 +70,14 @@ void MysqlConn::freeResult() {
         mysql_free_result(m_result);
         m_result = nullptr;
     }
+}
+
+void MysqlConn::refreshAliveTime() {
+    m_alivetime = std::chrono::steady_clock::now();
+}
+
+long long MysqlConn::getAliveTime() {
+    std::chrono::nanoseconds res = std::chrono::steady_clock::now() - m_alivetime;
+    std::chrono::milliseconds millsec = std::chrono::duration_cast<std::chrono::milliseconds>(res);
+    return millsec.count();
 }

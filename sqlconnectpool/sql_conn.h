@@ -1,7 +1,9 @@
 #ifndef MYSQLCONNECTION_H
 #define MYSQLCONNECTION_H
+#include <chrono>
 #include <iostream>
 #include <mysql/mysql.h>
+
 class MysqlConn
 {
 public:
@@ -16,12 +18,14 @@ public:
     bool transaction();
     bool commit();
     bool rollback();
-
+    void refreshAliveTime();
+    long long getAliveTime();
 private:
     void freeResult();
     MYSQL* m_conn = nullptr;
     MYSQL_RES* m_result = nullptr;
     MYSQL_ROW m_row = nullptr;
+    std::chrono::steady_clock::time_point m_alivetime;
 };
 
 #endif
